@@ -357,6 +357,46 @@
     @apply text-sm font-sans-bold text-accent;
   }
 
+  .auth-social-block {
+    @apply gap-3;
+  }
+
+  .auth-social-button {
+    @apply w-full items-center rounded-2xl border border-border py-4;
+  }
+
+  .auth-social-button-google {
+    @apply bg-background;
+  }
+
+  .auth-social-button-apple {
+    @apply bg-foreground;
+  }
+
+  .auth-social-button-text {
+    @apply text-base font-sans-bold text-primary;
+  }
+
+  .auth-social-button-apple .auth-social-button-text {
+    @apply text-background;
+  }
+
+  .onboarding-features {
+    @apply gap-4;
+  }
+
+  .onboarding-feature {
+    @apply rounded-3xl border border-border bg-background p-4;
+  }
+
+  .onboarding-feature-title {
+    @apply text-base font-sans-bold text-primary;
+  }
+
+  .onboarding-feature-copy {
+    @apply mt-1 text-sm font-sans-medium text-muted-foreground;
+  }
+
   .modal-overlay {
     @apply flex-1 bg-black/50;
   }

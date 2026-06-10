@@ -1,10 +1,20 @@
 import "@/global.css";
+import { ClerkProvider } from "@clerk/expo";
+import { tokenCache } from "@clerk/expo/token-cache";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync();
 
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+if (!publishableKey) {
+  throw new Error(
+    "Add your Clerk Publishable Key to the .env file as EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY",
+  );
+}
+const publishableKeyValue: string = publishableKey;
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     "sans-light": require("../assets/fonts/PlusJakartaSans-Light.ttf"),
@@ -24,5 +34,10 @@ export default function RootLayout() {
   if (!fontsLoaded) {
     return null;
   }
-  return <Stack screenOptions={{ headerShown: false }} />;
+
+  return (
+    <ClerkProvider publishableKey={publishableKeyValue} tokenCache={tokenCache}>
+      <Stack screenOptions={{ headerShown: false }} />
+    </ClerkProvider>
+  );
 }
