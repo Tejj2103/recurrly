@@ -77,18 +77,6 @@ const Onboarding = () => {
           </Pressable>
         </View>
 
-        <View className="auth-brand-block mt-6 px-1">
-          <View className="auth-logo-wrap">
-            <View className="auth-logo-mark">
-              <Text className="auth-logo-mark-text">S</Text>
-            </View>
-            <View>
-              <Text className="auth-wordmark">Subscribe</Text>
-              <Text className="auth-wordmark-sub">billing made easy</Text>
-            </View>
-          </View>
-        </View>
-
         <ScrollView
           ref={scrollRef}
           horizontal
@@ -106,7 +94,7 @@ const Onboarding = () => {
               style={{ width: pageWidth }}
               className="px-2"
             >
-              <View className="auth-card rounded-[32px] p-6">
+              <View className="p-6 h-full items-center justify-center">
                 <Text className="text-3xl font-sans-bold text-primary text-center mb-4">
                   {item.title}
                 </Text>
