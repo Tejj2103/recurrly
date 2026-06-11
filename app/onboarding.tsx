@@ -44,9 +44,19 @@ const Onboarding = () => {
   const isFirst = page === 0;
   const isLast = page === pages.length - 1;
 
+  const updatePage = (offsetX: number) => {
+    const nextPage = Math.round(offsetX / pageWidth);
+    if (nextPage !== page) {
+      setPage(nextPage);
+    }
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    updatePage(event.nativeEvent.contentOffset.x);
+  };
+
   const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const nextPage = Math.round(event.nativeEvent.contentOffset.x / pageWidth);
-    setPage(nextPage);
+    updatePage(event.nativeEvent.contentOffset.x);
   };
 
   const goToPage = (nextPage: number) => {
@@ -85,7 +95,9 @@ const Onboarding = () => {
           snapToAlignment="center"
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
           onMomentumScrollEnd={handleScrollEnd}
+          scrollEventThrottle={16}
           contentContainerStyle={{ paddingTop: 24 }}
         >
           {pages.map((item) => (
