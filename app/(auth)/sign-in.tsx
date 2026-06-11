@@ -1,17 +1,15 @@
 import { useAuth, useSignIn } from "@clerk/expo";
-import { useSignInWithApple } from "@clerk/expo/apple";
-import { useSignInWithGoogle } from "@clerk/expo/google";
 import { type Href, Link, Redirect, useRouter } from "expo-router";
 import { styled } from "nativewind";
 import React, { useState } from "react";
 import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
@@ -20,14 +18,11 @@ const SafeAreaView = styled(RNSafeAreaView);
 export default function SignIn() {
   const { isLoaded, isSignedIn } = useAuth();
   const { signIn, errors, fetchStatus } = useSignIn();
-  const { startGoogleAuthenticationFlow } = useSignInWithGoogle();
-  const { startAppleAuthenticationFlow } = useSignInWithApple();
   const router = useRouter();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [generalError, setGeneralError] = useState<string | null>(null);
-  const [socialError, setSocialError] = useState<string | null>(null);
 
   if (!isLoaded) {
     return null;
@@ -96,31 +91,6 @@ export default function SignIn() {
     }
 
     setGeneralError("We couldn't complete sign in. Please try again.");
-  };
-
-  const handleGoogleSignIn = async () => {
-    setSocialError(null);
-
-    try {
-      await startGoogleAuthenticationFlow();
-    } catch (error: any) {
-      setSocialError(
-        error?.message ||
-          "Google sign in is unavailable. Please configure your Clerk OAuth settings.",
-      );
-    }
-  };
-
-  const handleAppleSignIn = async () => {
-    setSocialError(null);
-
-    try {
-      await startAppleAuthenticationFlow();
-    } catch (error: any) {
-      setSocialError(
-        error?.message || "Apple sign in is unavailable on this device.",
-      );
-    }
   };
 
   const handleVerify = async () => {
@@ -283,42 +253,6 @@ export default function SignIn() {
                 )}
               </View>
 
-              <View className="auth-social-block">
-                {Platform.OS !== "web" ? (
-                  <>
-                    <Pressable
-                      onPress={handleGoogleSignIn}
-                      className="auth-button auth-social-button auth-social-button-google"
-                    >
-                      <Text className="auth-social-button-text">
-                        Continue with Google
-                      </Text>
-                    </Pressable>
-                    {Platform.OS === "ios" ? (
-                      <Pressable
-                        onPress={handleAppleSignIn}
-                        className="auth-button auth-social-button auth-social-button-apple"
-                      >
-                        <Text className="auth-social-button-text">
-                          Continue with Apple
-                        </Text>
-                      </Pressable>
-                    ) : null}
-                  </>
-                ) : null}
-              </View>
-
-              <View className="auth-divider-row">
-                <View className="auth-divider-line" />
-                <Text className="auth-divider-text">
-                  Or continue with email
-                </Text>
-                <View className="auth-divider-line" />
-              </View>
-
-              {socialError ? (
-                <Text className="auth-error">{socialError}</Text>
-              ) : null}
               {generalError ? (
                 <Text className="auth-error">{generalError}</Text>
               ) : null}

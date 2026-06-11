@@ -1,6 +1,4 @@
 import { useAuth, useSignUp } from "@clerk/expo";
-import { useSignInWithApple } from "@clerk/expo/apple";
-import { useSignInWithGoogle } from "@clerk/expo/google";
 import { type Href, Link, Redirect, useRouter } from "expo-router";
 import { styled } from "nativewind";
 import React, { useState } from "react";
@@ -20,15 +18,12 @@ const SafeAreaView = styled(RNSafeAreaView);
 export default function SignUp() {
   const { isLoaded, isSignedIn } = useAuth();
   const { signUp, errors, fetchStatus } = useSignUp();
-  const { startGoogleAuthenticationFlow } = useSignInWithGoogle();
-  const { startAppleAuthenticationFlow } = useSignInWithApple();
   const router = useRouter();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [username, setUsername] = useState("");
   const [generalError, setGeneralError] = useState<string | null>(null);
-  const [socialError, setSocialError] = useState<string | null>(null);
   const [showVerificationStep, setShowVerificationStep] = useState(false);
 
   if (!isLoaded) {
@@ -169,31 +164,6 @@ export default function SignUp() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setSocialError(null);
-
-    try {
-      await startGoogleAuthenticationFlow();
-    } catch (error: any) {
-      setSocialError(
-        error?.message ||
-          "Google sign in is unavailable. Please configure your Clerk OAuth settings.",
-      );
-    }
-  };
-
-  const handleAppleSignIn = async () => {
-    setSocialError(null);
-
-    try {
-      await startAppleAuthenticationFlow();
-    } catch (error: any) {
-      setSocialError(
-        error?.message || "Apple sign in is unavailable on this device.",
-      );
-    }
-  };
-
   const isVerificationStep = showVerificationStep;
 
   return (
@@ -228,41 +198,6 @@ export default function SignUp() {
             <View className="auth-form">
               {!isVerificationStep ? (
                 <>
-                  {Platform.OS !== "web" ? (
-                    <View className="auth-social-block">
-                      <Pressable
-                        onPress={handleGoogleSignIn}
-                        className="auth-button auth-social-button auth-social-button-google"
-                      >
-                        <Text className="auth-social-button-text">
-                          Continue with Google
-                        </Text>
-                      </Pressable>
-                      {Platform.OS === "ios" ? (
-                        <Pressable
-                          onPress={handleAppleSignIn}
-                          className="auth-button auth-social-button auth-social-button-apple"
-                        >
-                          <Text className="auth-social-button-text">
-                            Continue with Apple
-                          </Text>
-                        </Pressable>
-                      ) : null}
-                    </View>
-                  ) : null}
-
-                  {socialError ? (
-                    <Text className="auth-error">{socialError}</Text>
-                  ) : null}
-
-                  <View className="auth-divider-row">
-                    <View className="auth-divider-line" />
-                    <Text className="auth-divider-text">
-                      Or sign up with email
-                    </Text>
-                    <View className="auth-divider-line" />
-                  </View>
-
                   <View className="auth-field">
                     <Text className="auth-label">Username</Text>
                     <TextInput
